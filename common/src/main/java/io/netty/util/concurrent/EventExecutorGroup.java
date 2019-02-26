@@ -36,6 +36,7 @@ public interface EventExecutorGroup extends ScheduledExecutorService, Iterable<E
     boolean isShuttingDown();
 
     /**
+     * 优雅关闭
      * Shortcut method for {@link #shutdownGracefully(long, long, TimeUnit)} with sensible default values.
      *
      * @return the {@link #terminationFuture()}
@@ -83,9 +84,11 @@ public interface EventExecutorGroup extends ScheduledExecutorService, Iterable<E
      */
     EventExecutor next();
 
+    // ========== 实现自 Iterable 接口 ==========
     @Override
     Iterator<EventExecutor> iterator();
 
+    // ========== 实现自 ExecutorService 接口 ==========
     @Override
     Future<?> submit(Runnable task);
 
@@ -95,6 +98,7 @@ public interface EventExecutorGroup extends ScheduledExecutorService, Iterable<E
     @Override
     <T> Future<T> submit(Callable<T> task);
 
+    // ========== 实现自 ScheduledExecutorService 接口 ==========
     @Override
     ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit);
 

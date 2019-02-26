@@ -25,6 +25,7 @@ package io.netty.util.concurrent;
 public interface EventExecutor extends EventExecutorGroup {
 
     /**
+     * 返回自己
      * Returns a reference to itself.
      */
     @Override
@@ -36,22 +37,26 @@ public interface EventExecutor extends EventExecutorGroup {
     EventExecutorGroup parent();
 
     /**
+     * 当前线程是否在 EventLoop 线程中
      * Calls {@link #inEventLoop(Thread)} with {@link Thread#currentThread()} as argument
      */
     boolean inEventLoop();
 
     /**
+     * 指定线程是否是 EventLoop 线程
      * Return {@code true} if the given {@link Thread} is executed in the event loop,
      * {@code false} otherwise.
      */
     boolean inEventLoop(Thread thread);
 
     /**
+     * 创建一个 Promise 对象
      * Return a new {@link Promise}.
      */
     <V> Promise<V> newPromise();
 
     /**
+     * 创建一个 ProgressivePromise 对象
      * Create a new {@link ProgressivePromise}.
      */
     <V> ProgressivePromise<V> newProgressivePromise();

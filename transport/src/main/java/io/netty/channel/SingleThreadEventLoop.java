@@ -27,11 +27,16 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadFactory;
 
 /**
+ *
+ * 增加了 Channel 注册到 EventLoop 上
  * Abstract base class for {@link EventLoop}s that execute all its submitted tasks in a single thread.
  *
  */
 public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor implements EventLoop {
 
+    /**
+     * 默认任务队列最大数量
+     */
     protected static final int DEFAULT_MAX_PENDING_TASKS = Math.max(16,
             SystemPropertyUtil.getInt("io.netty.eventLoop.maxPendingTasks", Integer.MAX_VALUE));
 
@@ -103,14 +108,17 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
     @UnstableApi
     public final void executeAfterEventLoopIteration(Runnable task) {
         ObjectUtil.checkNotNull(task, "task");
+        // 关闭时，拒绝任务
         if (isShutdown()) {
             reject();
         }
 
+        // 添加到任务队列
         if (!tailTasks.offer(task)) {
             reject(task);
         }
 
+        // 唤醒线程
         if (wakesUpForTask(task)) {
             wakeup(inEventLoop());
         }
